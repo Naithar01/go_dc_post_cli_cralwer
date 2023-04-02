@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
@@ -16,7 +17,8 @@ type Post struct {
 }
 
 var (
-	URL string = "https://gall.dcinside.com/board/lists/?id=programming&page=%d"
+	URL   string = "https://gall.dcinside.com/board/lists/?id=programming&page=%d"
+	mutex sync.Mutex
 )
 
 func RequestCrawlerSite(page int, docChan chan *goquery.Document) error {
@@ -63,7 +65,9 @@ func Crawler_Pages(posts *[]Post, page_count int) {
 			title := s.Find("td.gall_tit > a").Text()
 			writer := s.Find("td.gall_writer").AttrOr("data-nick", "ㅇㅇ")
 			post := Post{Id: id, Title: title, Writer: writer}
+			mutex.Lock()
 			*posts = append(*posts, post)
+			mutex.Unlock()
 		})
 	}
 }
@@ -84,7 +88,9 @@ func Crawler_Page(posts *[]Post, page_count int) {
 			title := s.Find("td.gall_tit > a").Text()
 			writer := s.Find("td.gall_writer").AttrOr("data-nick", "ㅇㅇ")
 			post := Post{Id: id, Title: title, Writer: writer}
+			mutex.Lock()
 			*posts = append(*posts, post)
+			mutex.Unlock()
 		})
 	}
 }
