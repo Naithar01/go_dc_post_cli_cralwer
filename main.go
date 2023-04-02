@@ -36,7 +36,9 @@ func CrawlerSite(page int, docChan chan *goquery.Document) error {
 	return nil
 }
 
-func Crawler(posts *[]Post, page_count int) {
+// 페이지 * 10 페이지의 데이터를 가져오는 함수
+// page_count 1이면 1 페이지 ~ 9 페이지의 글을 가져옴
+func Crawler_Pages(posts *[]Post, page_count int) {
 	docChan := make(chan *goquery.Document)
 
 	go func() {
@@ -65,6 +67,27 @@ func Crawler(posts *[]Post, page_count int) {
 	}
 }
 
+// 매개변수로 온 페이지의 게시물만 가져오는 함수
+// 위의 함수랑 절대 다름
+func Crawler_Page(posts *[]Post, page_count int) {
+	docChan := make(chan *goquery.Document)
+
+	go func() {
+		CrawlerSite(page_count, docChan)
+		close(docChan)
+	}()
+
+	for doc := range docChan {
+		doc.Find("tr.ub-content").Each(func(i int, s *goquery.Selection) {
+			id := s.Find("td.gall_num").Text()
+			title := s.Find("td.gall_tit > a").Text()
+			writer := s.Find("td.gall_writer").AttrOr("data-nick", "ㅇㅇ")
+			post := Post{Id: id, Title: title, Writer: writer}
+			*posts = append(*posts, post)
+		})
+	}
+}
+
 func main() {
 	// 실행속도를 확인하기 위한
 	start := time.Now()
@@ -72,10 +95,10 @@ func main() {
 	// 한 페이지에 게시글은 총 51개
 	var posts []Post
 
-	page_count := 2
-	for i := 1; i <= page_count; i++ {
-		Crawler(&posts, i)
-	}
+	page_count := 1
+
+	// Crawler_Page(&posts, page_count)
+	Crawler_Pages(&posts, page_count)
 
 	fmt.Println("    ", len(posts))
 
