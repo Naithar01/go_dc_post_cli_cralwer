@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -52,7 +53,6 @@ func Crawler_Pages(posts *[]Post, page_count int) {
 		}
 		for page := StartPage; page <= EndPage; page++ {
 			RequestCrawlerSite(page, docChan)
-			fmt.Print(" ", page)
 		}
 		close(docChan)
 	}()
@@ -89,7 +89,25 @@ func Crawler_Page(posts *[]Post, page_count int) {
 	}
 }
 
-func main() {
+func Pages() {
+	// 실행속도를 확인하기 위한
+	start := time.Now()
+
+	// 한 페이지에 게시글은 총 51개
+	var posts []Post
+
+	page_count := 3
+
+	for i := 1; i <= page_count; i++ {
+		Crawler_Pages(&posts, page_count)
+	}
+
+	log.Println("Crawler_Pages Get Data length:: ", len(posts))
+
+	log.Println(time.Now().Sub(start).Seconds(), "/s")
+}
+
+func Page() {
 	// 실행속도를 확인하기 위한
 	start := time.Now()
 
@@ -98,10 +116,14 @@ func main() {
 
 	page_count := 1
 
-	// Crawler_Page(&posts, page_count)
 	Crawler_Page(&posts, page_count)
 
-	fmt.Println("    ", len(posts))
+	log.Println("Crawler_Page Get Data length:: ", len(posts))
 
-	fmt.Println(time.Now().Sub(start).Seconds(), "/s")
+	log.Println(time.Now().Sub(start).Seconds(), "/s")
+}
+
+func main() {
+	Pages()
+	Page()
 }
