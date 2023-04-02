@@ -18,7 +18,7 @@ var (
 	URL string = "https://gall.dcinside.com/board/lists/?id=programming&page=%d"
 )
 
-func CrawlerSite(page int, docChan chan *goquery.Document) error {
+func RequestCrawlerSite(page int, docChan chan *goquery.Document) error {
 	url := fmt.Sprintf(URL, page)
 	res, err := http.Get(url)
 	if err != nil {
@@ -42,16 +42,17 @@ func Crawler_Pages(posts *[]Post, page_count int) {
 	docChan := make(chan *goquery.Document)
 
 	go func() {
+		var StartPage, EndPage int
 		if page_count == 1 {
-			for page := 1; page <= 9; page++ {
-				CrawlerSite(page, docChan)
-				fmt.Print(page)
-			}
+			StartPage = 1
+			EndPage = 9
 		} else {
-			for page := (page_count - 1) * 10; page <= page_count*10-1; page++ {
-				CrawlerSite(page, docChan)
-				fmt.Print(page)
-			}
+			StartPage = (page_count - 1) * 10
+			EndPage = page_count*10 - 1
+		}
+		for page := StartPage; page <= EndPage; page++ {
+			RequestCrawlerSite(page, docChan)
+			fmt.Print(" ", page)
 		}
 		close(docChan)
 	}()
@@ -73,7 +74,7 @@ func Crawler_Page(posts *[]Post, page_count int) {
 	docChan := make(chan *goquery.Document)
 
 	go func() {
-		CrawlerSite(page_count, docChan)
+		RequestCrawlerSite(page_count, docChan)
 		close(docChan)
 	}()
 
@@ -98,7 +99,7 @@ func main() {
 	page_count := 1
 
 	// Crawler_Page(&posts, page_count)
-	Crawler_Pages(&posts, page_count)
+	Crawler_Page(&posts, page_count)
 
 	fmt.Println("    ", len(posts))
 
