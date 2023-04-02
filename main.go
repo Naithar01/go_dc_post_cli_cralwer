@@ -96,10 +96,10 @@ func Pages() {
 	// 한 페이지에 게시글은 총 51개
 	var posts []Post
 
-	page_count := 3
+	page_count := 2
 
 	for i := 1; i <= page_count; i++ {
-		Crawler_Pages(&posts, page_count)
+		Crawler_Pages(&posts, i)
 	}
 
 	log.Println("Crawler_Pages Get Data length:: ", len(posts))
