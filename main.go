@@ -42,7 +42,7 @@ func RequestCrawlerSite(page int, docChan chan *goquery.Document) error {
 // 페이지 * 10 페이지의 데이터를 가져오는 함수
 // page_count 1이면 1 페이지 ~ 9 페이지의 글을 가져옴
 func Crawler_Pages(posts *[]Post, page_count int) {
-	docChan := make(chan *goquery.Document)
+	docChan := make(chan *goquery.Document, 10)
 
 	go func() {
 		var StartPage, EndPage int
@@ -75,7 +75,7 @@ func Crawler_Pages(posts *[]Post, page_count int) {
 // 매개변수로 온 페이지의 게시물만 가져오는 함수
 // 위의 함수랑 절대 다름
 func Crawler_Page(posts *[]Post, page_count int) {
-	docChan := make(chan *goquery.Document)
+	docChan := make(chan *goquery.Document, 10)
 
 	go func() {
 		RequestCrawlerSite(page_count, docChan)
