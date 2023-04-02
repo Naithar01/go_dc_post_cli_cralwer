@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/PuerkitoBio/goquery"
 )
@@ -35,14 +36,20 @@ func CrawlerSite(page int, docChan chan *goquery.Document) error {
 	return nil
 }
 
-func main() {
-	// 한 페이지에 게시글은 총 51개
-	var posts []Post
+func Crawler(posts *[]Post, page_count int) {
 	docChan := make(chan *goquery.Document)
 
 	go func() {
-		for page := 1; page <= 22; page++ {
-			CrawlerSite(page, docChan)
+		if page_count == 1 {
+			for page := 1; page <= 9; page++ {
+				CrawlerSite(page, docChan)
+				fmt.Print(page)
+			}
+		} else {
+			for page := (page_count - 1) * 10; page <= page_count*10-1; page++ {
+				CrawlerSite(page, docChan)
+				fmt.Print(page)
+			}
 		}
 		close(docChan)
 	}()
@@ -53,9 +60,24 @@ func main() {
 			title := s.Find("td.gall_tit > a").Text()
 			writer := s.Find("td.gall_writer").AttrOr("data-nick", "ㅇㅇ")
 			post := Post{Id: id, Title: title, Writer: writer}
-			posts = append(posts, post)
+			*posts = append(*posts, post)
 		})
 	}
+}
 
-	fmt.Println(posts)
+func main() {
+	// 실행속도를 확인하기 위한
+	start := time.Now()
+
+	// 한 페이지에 게시글은 총 51개
+	var posts []Post
+
+	page_count := 2
+	for i := 1; i <= page_count; i++ {
+		Crawler(&posts, i)
+	}
+
+	fmt.Println("    ", len(posts))
+
+	fmt.Println(time.Now().Sub(start).Seconds(), "/s")
 }
