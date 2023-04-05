@@ -1,35 +1,155 @@
 package main
 
 import (
-	"flag"
-	"fmt"
+	"log"
+	"strconv"
 
 	"github.com/Naithar01/dc_cli_crawler/crawler"
+	"github.com/nsf/termbox-go"
 )
 
-func main() {
-	var count int
-	var reverse bool
+type Header_Info struct {
+	Site_Page string
+	Now_Page  string
+	Max_Page  string
+	x         int
+	color     termbox.Attribute
+}
 
-	// -n 5 -r 이런 식으로
-	// 	go build cli-app.go
-	// ./cli-app -n 5 -r
-	flag.IntVar(&count, "n", 10, "number of items to show")
-	flag.BoolVar(&reverse, "r", false, "show results in reverse order")
+func (h *Header_Info) WriteSitePage() {
+	h.WriteBanner("Site Page:")
+	for _, header_info_site_page := range h.Site_Page {
+		termbox.SetCell(h.x, 0, header_info_site_page, h.color, termbox.ColorDefault)
+		h.x++
+	}
+}
 
-	flag.Parse()
+func (h *Header_Info) WriteNowPage() {
+	termbox.SetCell(h.x, 0, ' ', h.color, termbox.ColorDefault)
+	h.x++
 
-	data := crawler.Page()
+	h.WriteBanner("| Now Page:")
+	for _, header_info_now_page := range h.Now_Page {
+		termbox.SetCell(h.x, 0, header_info_now_page, h.color, termbox.ColorDefault)
+		h.x++
+	}
+}
 
-	if reverse {
-		for i := len(data) - 1; i >= 0 && count > 0; i-- {
-			fmt.Println(data[i])
-			count--
+func (h *Header_Info) WriteMaxPage() {
+	termbox.SetCell(h.x, 0, ' ', h.color, termbox.ColorDefault)
+	h.x++
+
+	h.WriteBanner("| Max Page:")
+	for _, header_info_max_page := range h.Max_Page {
+		termbox.SetCell(h.x, 0, header_info_max_page, h.color, termbox.ColorDefault)
+		h.x++
+	}
+}
+
+func (h *Header_Info) WriteBanner(banner string) {
+	for _, b := range banner {
+		termbox.SetCell(h.x, 0, b, h.color, termbox.ColorDefault)
+		h.x++
+	}
+}
+
+func (h *Header_Info) WriteHeaderInfo() {
+	h.WriteSitePage()
+	h.WriteNowPage()
+	h.WriteMaxPage()
+}
+
+func InitTermBox() error {
+	err := termbox.Init()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func InitWritePostHeader() *Header_Info {
+	return &Header_Info{
+		Site_Page: "1",
+		Now_Page:  "2",
+		Max_Page:  "31",
+		x:         0,
+	}
+}
+
+func WritePosts(color termbox.Attribute) error {
+	posts := crawler.Page()[:2]
+
+	for index, post := range posts {
+		x := 0
+		for _, ID := range post.Id {
+			termbox.SetCell(x, index, ID, color, termbox.ColorDefault)
+			x++
 		}
-	} else {
-		for i := 0; i < len(data) && count > 0; i++ {
-			fmt.Println(data[i])
-			count--
+
+		termbox.SetCell(x, index, ' ', color, termbox.ColorDefault)
+		x++
+
+		for _, TITLE := range post.Title {
+			termbox.SetCell(x, index, TITLE, color, termbox.ColorDefault)
+			x++
+		}
+	}
+	return nil
+}
+
+func main() {
+	err := InitTermBox()
+
+	if err != nil {
+		log.Panic(err.Error())
+	}
+
+	defer termbox.Close()
+	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
+
+	WritePosts(termbox.ColorWhite)
+
+	header_info := InitWritePostHeader()
+	header_info.color = termbox.ColorRed
+
+	for {
+		termbox.Flush()
+
+		switch ev := termbox.PollEvent(); ev.Type {
+		case termbox.EventKey:
+			if ev.Key == termbox.KeyEsc || ev.Key == termbox.KeyCtrlC {
+				return
+			}
+
+			if ev.Ch == 'q' || ev.Ch == 'e' {
+				termWidth, _ := termbox.Size()
+
+				for col := 0; col < termWidth; col++ {
+					termbox.SetCell(col, 0, ' ', termbox.ColorDefault, termbox.ColorDefault)
+				}
+
+				header_info.x = 0
+				now_page, _ := strconv.Atoi(header_info.Now_Page)
+
+				if ev.Ch == 'q' {
+					if now_page != 1 {
+						header_info.Now_Page = strconv.Itoa(now_page - 1)
+						header_info.WriteHeaderInfo()
+					} else {
+						header_info.WriteHeaderInfo()
+					}
+				} else if ev.Ch == 'e' {
+					max_page, _ := strconv.Atoi(header_info.Max_Page)
+					if now_page < max_page {
+						header_info.Now_Page = strconv.Itoa(now_page + 1)
+						header_info.WriteHeaderInfo()
+					} else {
+						header_info.WriteHeaderInfo()
+					}
+				}
+			}
+
 		}
 	}
 }
