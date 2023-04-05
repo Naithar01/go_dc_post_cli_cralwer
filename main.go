@@ -8,6 +8,30 @@ import (
 	"github.com/nsf/termbox-go"
 )
 
+type Post_Info struct {
+	posts []crawler.Post
+}
+
+func (p *Post_Info) WritePosts(color termbox.Attribute) {
+	p.posts = crawler.Page()[:5] // Test...
+
+	for index, post := range p.posts {
+		x := 0
+		for _, ID := range post.Id {
+			termbox.SetCell(x, index+1, ID, color, termbox.ColorDefault)
+			x++
+		}
+
+		termbox.SetCell(x, index+1, ' ', color, termbox.ColorDefault)
+		x++
+
+		for _, TITLE := range post.Title {
+			termbox.SetCell(x, index+1, TITLE, color, termbox.ColorDefault)
+			x++
+		}
+	}
+}
+
 type Header_Info struct {
 	Site_Page string
 	Now_Page  string
@@ -77,25 +101,8 @@ func InitWritePostHeader() *Header_Info {
 	}
 }
 
-func WritePosts(color termbox.Attribute) error {
-	posts := crawler.Page()[:2]
-
-	for index, post := range posts {
-		x := 0
-		for _, ID := range post.Id {
-			termbox.SetCell(x, index, ID, color, termbox.ColorDefault)
-			x++
-		}
-
-		termbox.SetCell(x, index, ' ', color, termbox.ColorDefault)
-		x++
-
-		for _, TITLE := range post.Title {
-			termbox.SetCell(x, index, TITLE, color, termbox.ColorDefault)
-			x++
-		}
-	}
-	return nil
+func InitWritePost() *Post_Info {
+	return &Post_Info{posts: []crawler.Post{}}
 }
 
 func main() {
@@ -108,10 +115,11 @@ func main() {
 	defer termbox.Close()
 	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 
-	WritePosts(termbox.ColorWhite)
-
 	header_info := InitWritePostHeader()
 	header_info.color = termbox.ColorRed
+
+	posts_info := InitWritePost()
+	posts_info.WritePosts(termbox.ColorWhite)
 
 	for {
 		termbox.Flush()
