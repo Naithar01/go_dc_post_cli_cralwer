@@ -6,7 +6,8 @@ import (
 )
 
 type Post_Info struct {
-	Posts []crawler.Post
+	Posts       []crawler.Post
+	Post_Length int
 }
 
 func (p *Post_Info) WritePosts(color termbox.Attribute, page int) {

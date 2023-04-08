@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"math"
 	"strconv"
 
 	"github.com/Naithar01/dc_cli_crawler/crawler"
@@ -43,11 +44,20 @@ func main() {
 	defer termbox.Close()
 	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 
+	// Draw Header
 	header_info.Color = termbox.ColorRed
 	header_info.WriteHeaderInfo()
 
+	// Get now page (string -> integer)
 	now_page, _ := strconv.Atoi(header_info.Now_Page)
+
+	// Draw Posts
+	// Set Post Lenth ( Site Post Lenth (0 ~ 51) )
 	posts_info.WritePosts(termbox.ColorWhite, now_page)
+	posts_info.Post_Length = int(math.Ceil(float64(float32(len(posts_info.Posts)) / float32(6.0))))
+
+	// Set Max Page ( Post Length / 6 ) => Math.Ceil => ( 8.5 => 9.0 ) => integer 9
+	header_info.Max_Page = strconv.Itoa(posts_info.Post_Length)
 
 	for {
 		termbox.Flush()
