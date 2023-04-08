@@ -5,83 +5,9 @@ import (
 	"strconv"
 
 	"github.com/Naithar01/dc_cli_crawler/crawler"
+	"github.com/Naithar01/dc_cli_crawler/ui"
 	"github.com/nsf/termbox-go"
 )
-
-type Post_Info struct {
-	posts []crawler.Post
-}
-
-func (p *Post_Info) WritePosts(color termbox.Attribute) {
-	p.posts = crawler.Page()[:5] // Test...
-
-	for index, post := range p.posts {
-		x := 0
-		for _, ID := range post.Id {
-			termbox.SetCell(x, index+2, ID, color, termbox.ColorDefault)
-			x++
-		}
-
-		termbox.SetCell(x, index+2, ' ', color, termbox.ColorDefault)
-		x++
-
-		for _, TITLE := range post.Title {
-			termbox.SetCell(x, index+2, TITLE, color, termbox.ColorDefault)
-			x++
-		}
-	}
-}
-
-type Header_Info struct {
-	Site_Page string
-	Now_Page  string
-	Max_Page  string
-	x         int
-	color     termbox.Attribute
-}
-
-func (h *Header_Info) WriteSitePage() {
-	h.WriteBanner("Site Page:")
-	for _, header_info_site_page := range h.Site_Page {
-		termbox.SetCell(h.x, 1, header_info_site_page, h.color, termbox.ColorDefault)
-		h.x++
-	}
-}
-
-func (h *Header_Info) WriteNowPage() {
-	termbox.SetCell(h.x, 1, ' ', h.color, termbox.ColorDefault)
-	h.x++
-
-	h.WriteBanner("| Now Page:")
-	for _, header_info_now_page := range h.Now_Page {
-		termbox.SetCell(h.x, 1, header_info_now_page, h.color, termbox.ColorDefault)
-		h.x++
-	}
-}
-
-func (h *Header_Info) WriteMaxPage() {
-	termbox.SetCell(h.x, 1, ' ', h.color, termbox.ColorDefault)
-	h.x++
-
-	h.WriteBanner("| Max Page:")
-	for _, header_info_max_page := range h.Max_Page {
-		termbox.SetCell(h.x, 1, header_info_max_page, h.color, termbox.ColorDefault)
-		h.x++
-	}
-}
-
-func (h *Header_Info) WriteBanner(banner string) {
-	for _, b := range banner {
-		termbox.SetCell(h.x, 1, b, h.color, termbox.ColorDefault)
-		h.x++
-	}
-}
-
-func (h *Header_Info) WriteHeaderInfo() {
-	h.WriteSitePage()
-	h.WriteNowPage()
-	h.WriteMaxPage()
-}
 
 func InitTermBox() error {
 	err := termbox.Init()
@@ -92,17 +18,17 @@ func InitTermBox() error {
 	return nil
 }
 
-func InitWritePostHeader() *Header_Info {
-	return &Header_Info{
+func InitWritePostHeader() *ui.Header_Info {
+	return &ui.Header_Info{
 		Site_Page: "1",
 		Now_Page:  "2",
 		Max_Page:  "31",
-		x:         0,
+		X:         0,
 	}
 }
 
-func InitWritePost() *Post_Info {
-	return &Post_Info{posts: []crawler.Post{}}
+func InitWritePost() *ui.Post_Info {
+	return &ui.Post_Info{Posts: []crawler.Post{}}
 }
 
 func main() {
@@ -116,7 +42,7 @@ func main() {
 	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 
 	header_info := InitWritePostHeader()
-	header_info.color = termbox.ColorRed
+	header_info.Color = termbox.ColorRed
 	header_info.WriteHeaderInfo()
 
 	posts_info := InitWritePost()
@@ -138,7 +64,7 @@ func main() {
 					termbox.SetCell(col, 0, ' ', termbox.ColorDefault, termbox.ColorDefault)
 				}
 
-				header_info.x = 0
+				header_info.X = 0
 				now_page, _ := strconv.Atoi(header_info.Now_Page)
 
 				if ev.Ch == 'q' {
