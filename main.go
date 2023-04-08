@@ -18,15 +18,15 @@ func (p *Post_Info) WritePosts(color termbox.Attribute) {
 	for index, post := range p.posts {
 		x := 0
 		for _, ID := range post.Id {
-			termbox.SetCell(x, index+1, ID, color, termbox.ColorDefault)
+			termbox.SetCell(x, index+2, ID, color, termbox.ColorDefault)
 			x++
 		}
 
-		termbox.SetCell(x, index+1, ' ', color, termbox.ColorDefault)
+		termbox.SetCell(x, index+2, ' ', color, termbox.ColorDefault)
 		x++
 
 		for _, TITLE := range post.Title {
-			termbox.SetCell(x, index+1, TITLE, color, termbox.ColorDefault)
+			termbox.SetCell(x, index+2, TITLE, color, termbox.ColorDefault)
 			x++
 		}
 	}
@@ -43,36 +43,36 @@ type Header_Info struct {
 func (h *Header_Info) WriteSitePage() {
 	h.WriteBanner("Site Page:")
 	for _, header_info_site_page := range h.Site_Page {
-		termbox.SetCell(h.x, 0, header_info_site_page, h.color, termbox.ColorDefault)
+		termbox.SetCell(h.x, 1, header_info_site_page, h.color, termbox.ColorDefault)
 		h.x++
 	}
 }
 
 func (h *Header_Info) WriteNowPage() {
-	termbox.SetCell(h.x, 0, ' ', h.color, termbox.ColorDefault)
+	termbox.SetCell(h.x, 1, ' ', h.color, termbox.ColorDefault)
 	h.x++
 
 	h.WriteBanner("| Now Page:")
 	for _, header_info_now_page := range h.Now_Page {
-		termbox.SetCell(h.x, 0, header_info_now_page, h.color, termbox.ColorDefault)
+		termbox.SetCell(h.x, 1, header_info_now_page, h.color, termbox.ColorDefault)
 		h.x++
 	}
 }
 
 func (h *Header_Info) WriteMaxPage() {
-	termbox.SetCell(h.x, 0, ' ', h.color, termbox.ColorDefault)
+	termbox.SetCell(h.x, 1, ' ', h.color, termbox.ColorDefault)
 	h.x++
 
 	h.WriteBanner("| Max Page:")
 	for _, header_info_max_page := range h.Max_Page {
-		termbox.SetCell(h.x, 0, header_info_max_page, h.color, termbox.ColorDefault)
+		termbox.SetCell(h.x, 1, header_info_max_page, h.color, termbox.ColorDefault)
 		h.x++
 	}
 }
 
 func (h *Header_Info) WriteBanner(banner string) {
 	for _, b := range banner {
-		termbox.SetCell(h.x, 0, b, h.color, termbox.ColorDefault)
+		termbox.SetCell(h.x, 1, b, h.color, termbox.ColorDefault)
 		h.x++
 	}
 }
@@ -117,6 +117,7 @@ func main() {
 
 	header_info := InitWritePostHeader()
 	header_info.color = termbox.ColorRed
+	header_info.WriteHeaderInfo()
 
 	posts_info := InitWritePost()
 	posts_info.WritePosts(termbox.ColorWhite)
