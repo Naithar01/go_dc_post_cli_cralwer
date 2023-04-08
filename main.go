@@ -33,6 +33,8 @@ func InitWritePost() *ui.Post_Info {
 
 func main() {
 	err := InitTermBox()
+	header_info := InitWritePostHeader()
+	posts_info := InitWritePost()
 
 	if err != nil {
 		log.Panic(err.Error())
@@ -41,22 +43,23 @@ func main() {
 	defer termbox.Close()
 	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 
-	header_info := InitWritePostHeader()
 	header_info.Color = termbox.ColorRed
 	header_info.WriteHeaderInfo()
 
-	posts_info := InitWritePost()
-	posts_info.WritePosts(termbox.ColorWhite)
+	now_page, _ := strconv.Atoi(header_info.Now_Page)
+	posts_info.WritePosts(termbox.ColorWhite, now_page)
 
 	for {
 		termbox.Flush()
 
 		switch ev := termbox.PollEvent(); ev.Type {
 		case termbox.EventKey:
+			// Exit
 			if ev.Key == termbox.KeyEsc || ev.Key == termbox.KeyCtrlC {
 				return
 			}
 
+			// Change Page
 			if ev.Ch == 'q' || ev.Ch == 'e' {
 				termWidth, _ := termbox.Size()
 
@@ -70,21 +73,17 @@ func main() {
 				if ev.Ch == 'q' {
 					if now_page != 1 {
 						header_info.Now_Page = strconv.Itoa(now_page - 1)
-						header_info.WriteHeaderInfo()
-					} else {
-						header_info.WriteHeaderInfo()
 					}
 				} else if ev.Ch == 'e' {
 					max_page, _ := strconv.Atoi(header_info.Max_Page)
 					if now_page < max_page {
 						header_info.Now_Page = strconv.Itoa(now_page + 1)
-						header_info.WriteHeaderInfo()
-					} else {
-						header_info.WriteHeaderInfo()
+
 					}
 				}
+				header_info.WriteHeaderInfo()
+				posts_info.WritePosts(termbox.ColorWhite, now_page)
 			}
-
 		}
 	}
 }

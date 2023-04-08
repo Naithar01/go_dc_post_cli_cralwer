@@ -2,10 +2,8 @@ package crawler
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"sync"
-	"time"
 
 	"github.com/PuerkitoBio/goquery"
 )
@@ -96,9 +94,6 @@ func crawler_Page(posts *[]Post, page_count int) {
 }
 
 func Pages() {
-	// 실행속도를 확인하기 위한
-	start := time.Now()
-
 	// 한 페이지에 게시글은 총 51개
 	var posts []Post
 
@@ -108,17 +103,11 @@ func Pages() {
 		crawler_Pages(&posts, i)
 	}
 
-	log.Println("crawler_Pages Get Data length:: ", len(posts))
-
-	log.Println(time.Now().Sub(start).Seconds(), "/s")
 }
 
 // 두 번째 행부터의 값을 반환하는 이유는
 // 공지 게시글을 선택해오기 때문임
 func Page() []Post {
-	// 실행속도를 확인하기 위한
-	start := time.Now()
-
 	// 한 페이지에 게시글은 총 51개
 	var posts []Post
 
@@ -126,9 +115,5 @@ func Page() []Post {
 
 	crawler_Page(&posts, page_count)
 
-	log.Println("crawler_Page Get Data length:: ", len(posts))
-
-	log.Println(time.Now().Sub(start).Seconds(), "/s")
-
-	return posts[2:]
+	return posts
 }

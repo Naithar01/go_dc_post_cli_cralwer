@@ -9,8 +9,8 @@ type Post_Info struct {
 	Posts []crawler.Post
 }
 
-func (p *Post_Info) WritePosts(color termbox.Attribute) {
-	p.Posts = crawler.Page()[:5] // Test...
+func (p *Post_Info) WritePosts(color termbox.Attribute, page int) {
+	p.Posts = crawler.Page() // Test...
 
 	for index, post := range p.Posts {
 		x := 0
