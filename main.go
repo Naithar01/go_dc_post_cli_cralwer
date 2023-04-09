@@ -42,17 +42,7 @@ func InitApp() (*ui.Header_Info, *ui.Post_Info) {
 
 	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 
-	termWidth, termHeight := termbox.Size()
-
-	for row := 2; row < termHeight; row++ {
-		for col := 0; col < termWidth; col++ {
-			termbox.SetBg(col, row, termbox.ColorMagenta)
-		}
-	}
-
-	for col := 0; col < termWidth; col++ {
-		termbox.SetBg(col, 1, termbox.ColorYellow)
-	}
+	InitBackgroundColor()
 
 	// Draw Header
 	header_info.Color = termbox.ColorLightGray
@@ -76,6 +66,20 @@ func InitApp() (*ui.Header_Info, *ui.Post_Info) {
 	return header_info, posts_info
 }
 
+func InitBackgroundColor() {
+	termWidth, termHeight := termbox.Size()
+
+	for row := 2; row < termHeight; row++ {
+		for col := 0; col < termWidth; col++ {
+			termbox.SetBg(col, row, termbox.ColorMagenta)
+		}
+	}
+
+	for col := 0; col < termWidth; col++ {
+		termbox.SetBg(col, 1, termbox.ColorYellow)
+	}
+}
+
 func main() {
 	header_info, posts_info := InitApp()
 
@@ -83,6 +87,8 @@ func main() {
 
 	for {
 		termbox.Flush()
+
+		InitBackgroundColor()
 
 		switch ev := termbox.PollEvent(); ev.Type {
 		case termbox.EventKey:
@@ -114,6 +120,7 @@ func main() {
 
 				header_info.WriteHeaderInfo()
 				posts_info.WritePosts(termbox.ColorWhite, now_page)
+
 			}
 		}
 	}
