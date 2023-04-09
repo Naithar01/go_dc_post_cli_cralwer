@@ -43,8 +43,8 @@ func InitApp() (*ui.Header_Info, *ui.Post_Info) {
 	InitBackgroundColor()
 
 	// Draw Header
-	header_info.Color = termbox.ColorLightGray
-	header_info.BackgroundColor = termbox.ColorCyan
+	header_info.Color = termbox.ColorMagenta
+	header_info.BackgroundColor = termbox.ColorLightGreen
 
 	// Set Post Design
 	posts_info.Post_Line_Space = 3

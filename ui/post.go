@@ -24,8 +24,8 @@ func (p *Post_Info) WritePosts(page int) {
 		x := 2
 		for _, ID := range post.Id {
 			termbox.SetChar(x, index+p.Post_Line_Space, ID)
+			termbox.SetFg(x, index+p.Post_Line_Space, termbox.ColorWhite)
 			termbox.SetBg(x, index+p.Post_Line_Space, termbox.ColorBlue)
-			termbox.SetFg(x, index+p.Post_Line_Space, termbox.ColorBlue)
 			x++
 		}
 
@@ -33,8 +33,8 @@ func (p *Post_Info) WritePosts(page int) {
 
 		for _, TITLE := range post.Title {
 			termbox.SetChar(x, index+p.Post_Line_Space, TITLE)
-			termbox.SetBg(x, index+p.Post_Line_Space, termbox.ColorGreen)
 			termbox.SetFg(x, index+p.Post_Line_Space, termbox.ColorWhite)
+			termbox.SetBg(x, index+p.Post_Line_Space, termbox.ColorGreen)
 			x++
 		}
 	}
