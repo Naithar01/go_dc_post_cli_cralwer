@@ -40,11 +40,15 @@ func InitApp() (*ui.Header_Info, *ui.Post_Info) {
 		log.Panic(err.Error())
 	}
 
-	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
+	InitBackgroundColor()
 
 	// Draw Header
 	header_info.Color = termbox.ColorLightGray
 	header_info.BackgroundColor = termbox.ColorCyan
+
+	// Set Post Design
+	posts_info.Post_Line_Space = 3
+	posts_info.Color = termbox.ColorWhite
 
 	// Get now page (string -> integer)
 	now_page := header_info.GetNowPage()
@@ -54,19 +58,18 @@ func InitApp() (*ui.Header_Info, *ui.Post_Info) {
 	posts_info.GetPosts(site_page)
 
 	// Draw Posts
-	posts_info.WritePosts(termbox.ColorWhite, now_page)
+	posts_info.WritePosts(now_page)
 
 	// Post Length: 51, Cloude: 2 || 51 - 2 = 49; => 7 * 7 == 49
 	header_info.Max_Page = strconv.Itoa(posts_info.Post_Length)
 
 	header_info.WriteHeaderInfo()
 
-	InitBackgroundColor()
-
 	return header_info, posts_info
 }
 
 func InitBackgroundColor() {
+	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 	termWidth, termHeight := termbox.Size()
 
 	for row := 2; row < termHeight; row++ {
@@ -116,11 +119,11 @@ func main() {
 				}
 				now_page = header_info.GetNowPage()
 
+				InitBackgroundColor()
 				header_info.WriteHeaderInfo()
-				posts_info.WritePosts(termbox.ColorWhite, now_page)
+				posts_info.WritePosts(now_page)
 
 			}
 		}
-		InitBackgroundColor()
 	}
 }

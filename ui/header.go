@@ -18,36 +18,42 @@ type Header_Info struct {
 func (h *Header_Info) WriteSitePage() {
 	h.WriteBanner("Site Page:")
 	for _, header_info_site_page := range h.Site_Page {
-		termbox.SetCell(h.X, 1, header_info_site_page, h.Color, h.BackgroundColor)
+		termbox.SetChar(h.X, 1, header_info_site_page)
+		termbox.SetFg(h.X, 1, termbox.ColorBlue)
 		h.X++
 	}
 }
 
 func (h *Header_Info) WriteNowPage() {
-	termbox.SetCell(h.X, 1, ' ', h.Color, h.BackgroundColor)
+	termbox.SetChar(h.X, 1, ' ')
+	termbox.SetBg(h.X, 1, termbox.ColorCyan)
 	h.X++
 
 	h.WriteBanner("| Now Page:")
 	for _, header_info_now_page := range h.Now_Page {
-		termbox.SetCell(h.X, 1, header_info_now_page, h.Color, h.BackgroundColor)
+		termbox.SetChar(h.X, 1, header_info_now_page)
+		termbox.SetFg(h.X, 1, termbox.ColorBlue)
 		h.X++
 	}
 }
 
 func (h *Header_Info) WriteMaxPage() {
-	termbox.SetCell(h.X, 1, ' ', h.Color, h.BackgroundColor)
+	termbox.SetChar(h.X, 1, ' ')
+	termbox.SetBg(h.X, 1, termbox.ColorCyan)
 	h.X++
 
 	h.WriteBanner("| Max Page:")
 	for _, header_info_max_page := range h.Max_Page {
-		termbox.SetCell(h.X, 1, header_info_max_page, h.Color, h.BackgroundColor)
+		termbox.SetChar(h.X, 1, header_info_max_page)
+		termbox.SetFg(h.X, 1, termbox.ColorBlue)
 		h.X++
 	}
 }
 
 func (h *Header_Info) WriteBanner(banner string) {
 	for _, b := range banner {
-		termbox.SetCell(h.X, 1, b, h.Color, h.BackgroundColor)
+		termbox.SetChar(h.X, 1, b)
+		termbox.SetBg(h.X, 1, h.BackgroundColor)
 		h.X++
 	}
 }
