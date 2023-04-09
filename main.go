@@ -22,8 +22,8 @@ func InitTermBox() error {
 func InitWritePostHeader() *ui.Header_Info {
 	return &ui.Header_Info{
 		Site_Page: "1",
-		Now_Page:  "2",
-		Max_Page:  "31",
+		Now_Page:  "1",
+		Max_Page:  "",
 		X:         0,
 	}
 }
@@ -32,7 +32,7 @@ func InitWritePost() *ui.Post_Info {
 	return &ui.Post_Info{Posts: []crawler.Post{}}
 }
 
-func main() {
+func InitApp() (*ui.Header_Info, *ui.Post_Info) {
 	err := InitTermBox()
 	header_info := InitWritePostHeader()
 	posts_info := InitWritePost()
@@ -41,12 +41,10 @@ func main() {
 		log.Panic(err.Error())
 	}
 
-	defer termbox.Close()
 	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 
 	// Draw Header
 	header_info.Color = termbox.ColorRed
-	header_info.WriteHeaderInfo()
 
 	// Get now page (string -> integer)
 	now_page, _ := strconv.Atoi(header_info.Now_Page)
@@ -54,10 +52,20 @@ func main() {
 	// Draw Posts
 	// Set Post Lenth ( Site Post Lenth (0 ~ 51) )
 	posts_info.WritePosts(termbox.ColorWhite, now_page)
-	posts_info.Post_Length = int(math.Ceil(float64(float32(len(posts_info.Posts)) / float32(6.0))))
+	posts_info.Post_Length = int(math.Ceil(float64(float32(len(posts_info.Posts)) / float32(7.0))))
 
-	// Set Max Page ( Post Length / 6 ) => Math.Ceil => ( 8.5 => 9.0 ) => integer 9
+	// Post Length: 51, Cloude: 2 || 51 - 2 = 49; => 7 * 7 == 49
 	header_info.Max_Page = strconv.Itoa(posts_info.Post_Length)
+
+	header_info.WriteHeaderInfo()
+
+	return header_info, posts_info
+}
+
+func main() {
+	header_info, posts_info := InitApp()
+
+	defer termbox.Close()
 
 	for {
 		termbox.Flush()

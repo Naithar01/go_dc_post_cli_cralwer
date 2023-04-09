@@ -115,5 +115,5 @@ func Page() []Post {
 
 	crawler_Page(&posts, page_count)
 
-	return posts
+	return posts[2:]
 }
