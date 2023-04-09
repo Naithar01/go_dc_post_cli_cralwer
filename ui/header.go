@@ -7,20 +7,22 @@ import (
 )
 
 type Header_Info struct {
-	Site_Page       string
-	Now_Page        string
-	Max_Page        string
-	X               int
-	Color           termbox.Attribute
-	BackgroundColor termbox.Attribute
+	Site_Page           string
+	Now_Page            string
+	Max_Page            string
+	X                   int
+	Color               termbox.Attribute
+	BackgroundColor     termbox.Attribute
+	PageColor           termbox.Attribute
+	PageBackgroundColor termbox.Attribute
 }
 
 func (h *Header_Info) WriteSitePage() {
 	h.WriteBanner("Site Page:")
 	for _, header_info_site_page := range h.Site_Page {
 		termbox.SetChar(h.X, 1, header_info_site_page)
-		termbox.SetFg(h.X, 1, termbox.ColorWhite)
-		termbox.SetBg(h.X, 1, termbox.ColorBlack)
+		termbox.SetFg(h.X, 1, h.PageColor)
+		termbox.SetBg(h.X, 1, h.PageBackgroundColor)
 		h.X++
 	}
 }
@@ -33,8 +35,8 @@ func (h *Header_Info) WriteNowPage() {
 	h.WriteBanner("| Now Page:")
 	for _, header_info_now_page := range h.Now_Page {
 		termbox.SetChar(h.X, 1, header_info_now_page)
-		termbox.SetFg(h.X, 1, termbox.ColorWhite)
-		termbox.SetBg(h.X, 1, termbox.ColorBlack)
+		termbox.SetFg(h.X, 1, h.PageColor)
+		termbox.SetBg(h.X, 1, h.PageBackgroundColor)
 		h.X++
 	}
 }
@@ -47,8 +49,8 @@ func (h *Header_Info) WriteMaxPage() {
 	h.WriteBanner("| Max Page:")
 	for _, header_info_max_page := range h.Max_Page {
 		termbox.SetChar(h.X, 1, header_info_max_page)
-		termbox.SetFg(h.X, 1, termbox.ColorWhite)
-		termbox.SetBg(h.X, 1, termbox.ColorBlack)
+		termbox.SetFg(h.X, 1, h.PageColor)
+		termbox.SetBg(h.X, 1, h.PageBackgroundColor)
 		h.X++
 	}
 }
@@ -56,7 +58,7 @@ func (h *Header_Info) WriteMaxPage() {
 func (h *Header_Info) WriteBanner(banner string) {
 	for _, b := range banner {
 		termbox.SetChar(h.X, 1, b)
-		termbox.SetFg(h.X, 1, termbox.ColorBlue)
+		termbox.SetFg(h.X, 1, h.Color)
 		termbox.SetBg(h.X, 1, h.BackgroundColor)
 		h.X++
 	}

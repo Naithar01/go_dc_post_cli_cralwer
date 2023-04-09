@@ -45,13 +45,15 @@ func InitApp() (*ui.Header_Info, *ui.Post_Info) {
 	// Draw Header
 	header_info.Color = termbox.ColorMagenta
 	header_info.BackgroundColor = termbox.ColorLightGreen
+	header_info.PageColor = termbox.ColorWhite
+	header_info.PageBackgroundColor = termbox.ColorBlack
 
 	// Set Post Design
 	posts_info.Post_Line_Space = 3
 	posts_info.IDColor = termbox.ColorWhite
 	posts_info.IDBackgroundColor = termbox.ColorBlue
 	posts_info.TITLEColor = termbox.ColorCyan
-	posts_info.TITLEBackgroundColor = termbox.ColorGreen
+	posts_info.TITLEBackgroundColor = termbox.ColorBlack
 
 	// Get now page (string -> integer)
 	now_page := header_info.GetNowPage()
