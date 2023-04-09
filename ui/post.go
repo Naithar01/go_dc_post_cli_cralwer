@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"math"
+
 	"github.com/Naithar01/dc_cli_crawler/crawler"
 	"github.com/nsf/termbox-go"
 )
@@ -12,6 +14,8 @@ type Post_Info struct {
 
 func (p *Post_Info) GetPosts(site_page int) {
 	p.Posts = crawler.Page(site_page)
+	p.Post_Length = int(math.Ceil(float64(float32(len(p.Posts)) / float32(7.0))))
+
 }
 
 func (p *Post_Info) WritePosts(color termbox.Attribute, page int) {

@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"math"
 	"strconv"
 
 	"github.com/Naithar01/dc_cli_crawler/crawler"
@@ -44,18 +43,17 @@ func InitApp() (*ui.Header_Info, *ui.Post_Info) {
 	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 
 	// Draw Header
-	header_info.Color = termbox.ColorRed
+	header_info.Color = termbox.ColorLightGray
+	header_info.BackgroundColor = termbox.ColorCyan
 
 	// Get now page (string -> integer)
-	now_page, _ := strconv.Atoi(header_info.Now_Page)
+	now_page := header_info.GetNowPage()
 	site_page, _ := strconv.Atoi(header_info.Site_Page)
 
 	// Get Posts Data ( Crawler Data )
 	posts_info.GetPosts(site_page)
-	posts_info.Post_Length = int(math.Ceil(float64(float32(len(posts_info.Posts)) / float32(7.0))))
 
 	// Draw Posts
-	// Set Post Lenth ( Site Post Lenth (0 ~ 51) )
 	posts_info.WritePosts(termbox.ColorWhite, now_page)
 
 	// Post Length: 51, Cloude: 2 || 51 - 2 = 49; => 7 * 7 == 49
@@ -83,14 +81,8 @@ func main() {
 
 			// Change Page
 			if ev.Ch == 'q' || ev.Ch == 'e' {
-				termWidth, _ := termbox.Size()
-
-				for col := 0; col < termWidth; col++ {
-					termbox.SetCell(col, 0, ' ', termbox.ColorDefault, termbox.ColorDefault)
-				}
-
 				header_info.X = 0
-				now_page, _ := strconv.Atoi(header_info.Now_Page)
+				now_page := header_info.GetNowPage()
 
 				if ev.Ch == 'q' {
 					if now_page != 1 {
@@ -106,7 +98,8 @@ func main() {
 						continue
 					}
 				}
-				now_page, _ = strconv.Atoi(header_info.Now_Page)
+				now_page = header_info.GetNowPage()
+
 				header_info.WriteHeaderInfo()
 				posts_info.WritePosts(termbox.ColorWhite, now_page)
 			}
