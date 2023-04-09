@@ -107,13 +107,11 @@ func Pages() {
 
 // 두 번째 행부터의 값을 반환하는 이유는
 // 공지 게시글을 선택해오기 때문임
-func Page() []Post {
+func Page(site_page int) []Post {
 	// 한 페이지에 게시글은 총 51개
 	var posts []Post
 
-	page_count := 1
-
-	crawler_Page(&posts, page_count)
+	crawler_Page(&posts, site_page)
 
 	return posts[2:]
 }
