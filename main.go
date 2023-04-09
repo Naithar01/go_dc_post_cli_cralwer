@@ -42,6 +42,18 @@ func InitApp() (*ui.Header_Info, *ui.Post_Info) {
 
 	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 
+	termWidth, termHeight := termbox.Size()
+
+	for row := 2; row < termHeight; row++ {
+		for col := 0; col < termWidth; col++ {
+			termbox.SetBg(col, row, termbox.ColorMagenta)
+		}
+	}
+
+	for col := 0; col < termWidth; col++ {
+		termbox.SetBg(col, 1, termbox.ColorYellow)
+	}
+
 	// Draw Header
 	header_info.Color = termbox.ColorLightGray
 	header_info.BackgroundColor = termbox.ColorCyan

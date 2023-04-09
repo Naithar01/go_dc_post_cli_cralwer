@@ -53,12 +53,6 @@ func (h *Header_Info) WriteBanner(banner string) {
 }
 
 func (h *Header_Info) WriteHeaderInfo() {
-	termWidth, _ := termbox.Size()
-
-	for col := 0; col < termWidth; col++ {
-		termbox.SetCell(col, 1, ' ', h.Color, h.BackgroundColor)
-	}
-
 	h.WriteSitePage()
 	h.WriteNowPage()
 	h.WriteMaxPage()
