@@ -23,7 +23,7 @@ func InitWritePostHeader() *ui.Header_Info {
 		Site_Page: "1",
 		Now_Page:  "1",
 		Max_Page:  "",
-		X:         0,
+		X:         2,
 	}
 }
 
@@ -41,8 +41,6 @@ func InitApp() (*ui.Header_Info, *ui.Post_Info) {
 	}
 
 	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
-
-	InitBackgroundColor()
 
 	// Draw Header
 	header_info.Color = termbox.ColorLightGray
@@ -62,6 +60,8 @@ func InitApp() (*ui.Header_Info, *ui.Post_Info) {
 	header_info.Max_Page = strconv.Itoa(posts_info.Post_Length)
 
 	header_info.WriteHeaderInfo()
+
+	InitBackgroundColor()
 
 	return header_info, posts_info
 }
@@ -88,8 +88,6 @@ func main() {
 	for {
 		termbox.Flush()
 
-		InitBackgroundColor()
-
 		switch ev := termbox.PollEvent(); ev.Type {
 		case termbox.EventKey:
 			// Exit
@@ -99,7 +97,7 @@ func main() {
 
 			// Change Page
 			if ev.Ch == 'q' || ev.Ch == 'e' {
-				header_info.X = 0
+				header_info.X = 2
 				now_page := header_info.GetNowPage()
 
 				if ev.Ch == 'q' {
@@ -123,5 +121,6 @@ func main() {
 
 			}
 		}
+		InitBackgroundColor()
 	}
 }
