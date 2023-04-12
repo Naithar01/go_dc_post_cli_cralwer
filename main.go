@@ -43,17 +43,17 @@ func InitApp() (*ui.Header_Info, *ui.Post_Info) {
 	InitBackgroundColor()
 
 	// Draw Header
-	header_info.Color = termbox.ColorMagenta
-	header_info.BackgroundColor = termbox.ColorLightGreen
-	header_info.PageColor = termbox.ColorWhite
-	header_info.PageBackgroundColor = termbox.ColorBlack
+	header_info.Color = termbox.ColorDefault
+	header_info.BackgroundColor = termbox.ColorDefault
+	header_info.PageColor = termbox.ColorDefault
+	header_info.PageBackgroundColor = termbox.ColorDefault
 
 	// Set Post Design
 	posts_info.Post_Line_Space = 3
-	posts_info.IDColor = termbox.ColorWhite
-	posts_info.IDBackgroundColor = termbox.ColorBlue
-	posts_info.TITLEColor = termbox.ColorCyan
-	posts_info.TITLEBackgroundColor = termbox.ColorBlack
+	posts_info.IDColor = termbox.ColorDefault
+	posts_info.IDBackgroundColor = termbox.ColorDefault
+	posts_info.TITLEColor = termbox.ColorDefault
+	posts_info.TITLEBackgroundColor = termbox.ColorDefault
 
 	// Get now page (string -> integer)
 	now_page := header_info.GetNowPage()
@@ -79,12 +79,12 @@ func InitBackgroundColor() {
 
 	for row := 2; row < termHeight; row++ {
 		for col := 0; col < termWidth; col++ {
-			termbox.SetBg(col, row, termbox.ColorMagenta)
+			termbox.SetBg(col, row, termbox.ColorDefault)
 		}
 	}
 
 	for col := 0; col < termWidth; col++ {
-		termbox.SetBg(col, 1, termbox.ColorYellow)
+		termbox.SetBg(col, 1, termbox.ColorDefault)
 	}
 }
 
