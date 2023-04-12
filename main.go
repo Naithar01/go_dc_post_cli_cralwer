@@ -54,6 +54,8 @@ func InitApp() (*ui.Header_Info, *ui.Post_Info) {
 	posts_info.IDBackgroundColor = termbox.ColorDefault
 	posts_info.TITLEColor = termbox.ColorDefault
 	posts_info.TITLEBackgroundColor = termbox.ColorDefault
+	posts_info.WRITERColor = termbox.ColorDefault
+	posts_info.WRITERBackgroundColor = termbox.ColorDefault
 
 	// Get now page (string -> integer)
 	now_page := header_info.GetNowPage()
@@ -127,7 +129,28 @@ func main() {
 				InitBackgroundColor()
 				header_info.WriteHeaderInfo()
 				posts_info.WritePosts(now_page)
+			}
 
+			// Change Site Page
+			if ev.Ch == 'w' {
+				// now_page = 1로 초기화 해주기
+
+				InitBackgroundColor()
+
+				header_info.X = 2
+				header_info.Now_Page = "1"
+
+				now_page := header_info.GetNowPage()
+				site_page := header_info.GetSitePage()
+				site_page++
+
+				header_info.Site_Page = strconv.Itoa(site_page)
+				posts_info.GetPosts(site_page)
+
+				header_info.Max_Page = strconv.Itoa(posts_info.Post_Length)
+
+				header_info.WriteHeaderInfo()
+				posts_info.WritePosts(now_page)
 			}
 		}
 	}

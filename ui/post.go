@@ -8,13 +8,15 @@ import (
 )
 
 type Post_Info struct {
-	Posts                []crawler.Post
-	Post_Length          int
-	Post_Line_Space      int
-	IDColor              termbox.Attribute
-	IDBackgroundColor    termbox.Attribute
-	TITLEColor           termbox.Attribute
-	TITLEBackgroundColor termbox.Attribute
+	Posts                 []crawler.Post
+	Post_Length           int
+	Post_Line_Space       int
+	IDColor               termbox.Attribute
+	IDBackgroundColor     termbox.Attribute
+	TITLEColor            termbox.Attribute
+	TITLEBackgroundColor  termbox.Attribute
+	WRITERColor           termbox.Attribute
+	WRITERBackgroundColor termbox.Attribute
 }
 
 func (p *Post_Info) GetPosts(site_page int) {
@@ -36,6 +38,19 @@ func (p *Post_Info) WritePosts(page int) {
 
 		for _, TITLE := range post.Title {
 			termbox.SetChar(x, index+p.Post_Line_Space, TITLE)
+			termbox.SetFg(x, index+p.Post_Line_Space, p.TITLEColor)
+			termbox.SetBg(x, index+p.Post_Line_Space, p.TITLEBackgroundColor)
+			x++
+		}
+
+		for ; x <= 60; x++ {
+			termbox.SetChar(x, index+p.Post_Line_Space, ' ')
+			termbox.SetFg(x, index+p.Post_Line_Space, p.TITLEColor)
+			termbox.SetBg(x, index+p.Post_Line_Space, p.TITLEBackgroundColor)
+		}
+
+		for _, WRITER := range post.Writer {
+			termbox.SetChar(x, index+p.Post_Line_Space, WRITER)
 			termbox.SetFg(x, index+p.Post_Line_Space, p.TITLEColor)
 			termbox.SetBg(x, index+p.Post_Line_Space, p.TITLEBackgroundColor)
 			x++

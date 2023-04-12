@@ -75,3 +75,9 @@ func (h *Header_Info) GetNowPage() int {
 
 	return now_page
 }
+
+func (h *Header_Info) GetSitePage() int {
+	site_page, _ := strconv.Atoi(h.Site_Page)
+
+	return site_page
+}
